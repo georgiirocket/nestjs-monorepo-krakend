@@ -1,0 +1,90 @@
+services:
+  #Gateway api
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+      target: production
+    profiles: ['prod']
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    depends_on:
+      migration:
+         condition: service_completed_successfully
+    ports:
+      - '3000:3000'
+
+  #Post service
+  post:
+    build:
+      context: .
+      dockerfile: ./apps/post/Dockerfile
+      target: production
+    profiles: [ 'prod' ]
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+
+  #User service
+  user:
+    build:
+      context: .
+      dockerfile: ./apps/user/Dockerfile
+      target: production
+    profiles: [ 'prod' ]
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+
+  #Migration prisma
+  migration:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: production
+    profiles: [ 'prod' ]
+    restart: no
+    env_file:
+      - ./.env.production
+    depends_on:
+      postgresql-prod:
+        condition: service_healthy
+
+  #Prod database
+  postgresql-prod:
+    image: 'bitnami/postgresql:latest'
+    profiles: ['prod']
+    restart: unless-stopped
+    volumes:
+      - 'postgresql-prod:/bitnami/postgresql'
+    env_file:
+      - ./.env.production
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRESQL_USERNAME}" ]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+
+  #Dev database
+  postgresql-dev:
+    image: 'bitnami/postgresql:latest'
+    profiles: [ 'dev' ]
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgresql-dev:/bitnami/postgresql'
+    env_file:
+      - ./.env
+
+volumes:
+  postgresql-dev:
+  postgresql-prod:
