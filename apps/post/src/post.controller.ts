@@ -1,4 +1,4 @@
-import { Controller, Inject } from '@nestjs/common';
+import { Controller, Delete, Get, Inject, Patch, Post } from '@nestjs/common';
 import { PostService } from './post.service';
 import { ClientProxy, MessagePattern } from '@nestjs/microservices';
 import { EntityDto } from '@app/libs/dto/entity.dto';
@@ -11,8 +11,10 @@ import { SERVICE_NAMES } from '@app/libs/constants/services';
 import { catchError, firstValueFrom } from 'rxjs';
 import { UserDto } from '@app/libs/dto/user/user.dto';
 import { USER_PATTERNS } from '@app/libs/constants/patterns/user';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller()
+@ApiTags('Posts')
+@Controller('posts')
 export class PostController {
   constructor(
     private readonly postService: PostService,
@@ -39,6 +41,8 @@ export class PostController {
   /**
    * Get posts
    */
+  @ApiOkResponse({ type: [PostDto] })
+  @Get('list')
   @MessagePattern(POST_PATTERNS.GET_POSTS)
   async getList(): Promise<PostDto[]> {
     return await this.postService.getList();
@@ -47,6 +51,8 @@ export class PostController {
   /**
    * Get post by id
    */
+  @ApiOkResponse({ type: PostDto })
+  @Get('view/:id')
   @MessagePattern(POST_PATTERNS.GET_POST)
   async getView(data: EntityDto): Promise<PostDto> {
     const post = await this.postService.getView(data.entityId);
@@ -61,6 +67,8 @@ export class PostController {
   /**
    * Create post
    */
+  @ApiOkResponse({ type: PostDto })
+  @Post('create')
   @MessagePattern(POST_PATTERNS.CREATE_POST)
   async createEntity(data: CreatePostDto): Promise<PostDto> {
     await this.getUserById(data.authorId);
@@ -71,6 +79,8 @@ export class PostController {
    * Update post
    * @param data
    */
+  @ApiOkResponse({ type: PostDto })
+  @Patch('update')
   @MessagePattern(POST_PATTERNS.UPDATE_POST)
   async updateEntity(data: UpdatePostDto): Promise<PostDto> {
     return this.postService.updateEntity(data);
@@ -80,6 +90,8 @@ export class PostController {
    * Delete post
    * @param data
    */
+  @ApiOkResponse({ type: PostDto })
+  @Delete('delete')
   @MessagePattern(POST_PATTERNS.DELETE_POST)
   async deleteEntity(data: DeletePostDto): Promise<PostDto> {
     return this.postService.deleteUser(data);

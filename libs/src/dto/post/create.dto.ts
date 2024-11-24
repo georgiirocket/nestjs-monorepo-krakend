@@ -1,4 +1,4 @@
-import { IsInt, IsString, MinLength } from 'class-validator';
+import { IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**
@@ -14,8 +14,4 @@ export class CreatePostDto {
   @MinLength(10)
   @ApiProperty({ example: 'Hello world', required: true })
   description: string;
-
-  @IsInt()
-  @ApiProperty({ example: 1, required: true })
-  authorId: number;
 }

@@ -65,6 +65,25 @@ If you want to test endpoints. You can import this file in Postman
 
 ## Structure
 
+```mermaid
+  flowchart TD
+    G[KrakenD Gateway]
+    D[Database]
+
+    subgraph Services
+        s1[User service]
+        s2[Post service]
+        s3[Core service]
+    end
+
+    G --> s1
+    G --> s3
+    G --> s2
+    s1 --> D
+    s2 --> D
+    s3 --> D
+```
+
 ```
 .
 ├── Dockerfile

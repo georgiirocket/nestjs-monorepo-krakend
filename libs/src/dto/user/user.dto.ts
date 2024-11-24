@@ -1,19 +1,4 @@
-import { User } from '@prisma/client';
-import { ApiProperty } from '@nestjs/swagger';
+import { OmitType } from '@nestjs/swagger';
+import { UserModel } from '@app/libs/models/user/model';
 
-/**
- * Dto
- */
-export class UserDto implements User {
-  @ApiProperty({ example: 1 })
-  id: number;
-
-  @ApiProperty({ example: 'Joi' })
-  name: string;
-
-  @ApiProperty({ example: '2024-11-21T16:38:56Z' })
-  createdAt: Date;
-
-  @ApiProperty({ example: '2024-11-21T16:38:56Z' })
-  updatedAt: Date;
-}
+export class UserDto extends OmitType(UserModel, ['password']) {}

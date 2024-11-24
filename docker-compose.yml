@@ -1,21 +1,5 @@
 services:
-  #Gateway api
-  gateway:
-    build:
-      context: .
-      dockerfile: ./apps/gateway/Dockerfile
-      target: production
-    profiles: ['prod']
-    restart: unless-stopped
-    env_file:
-      - ./.env.production
-    depends_on:
-      migration:
-         condition: service_completed_successfully
-    ports:
-      - '3000:3000'
-
-  #Post service
+  #Post service (api)
   post:
     build:
       context: .
@@ -29,7 +13,7 @@ services:
       migration:
         condition: service_completed_successfully
 
-  #User service
+  #User service (api)
   user:
     build:
       context: .
