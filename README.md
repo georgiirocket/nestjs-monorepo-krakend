@@ -73,7 +73,7 @@ If you want to test endpoints. You can import this file in Postman
     subgraph Services
         s1[User service]
         s2[Post service]
-        s3[Core service]
+        s3[Auth service]
     end
 
     G --> s1

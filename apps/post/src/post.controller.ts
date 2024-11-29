@@ -26,7 +26,7 @@ export class PostController {
    * @param id
    * @private
    */
-  private getUserById(id: number): Promise<UserDto> {
+  private getUserById(id: string): Promise<UserDto> {
     return firstValueFrom(
       this.userService
         .send<UserDto, EntityDto>(USER_PATTERNS.GET_USER, { entityId: id })
@@ -71,7 +71,7 @@ export class PostController {
   @Post('create')
   @MessagePattern(POST_PATTERNS.CREATE_POST)
   async createEntity(data: CreatePostDto): Promise<PostDto> {
-    await this.getUserById(data.authorId);
+    // await this.getUserById(data.authorId);
     return this.postService.createEntity(data);
   }
 
@@ -94,6 +94,6 @@ export class PostController {
   @Delete('delete')
   @MessagePattern(POST_PATTERNS.DELETE_POST)
   async deleteEntity(data: DeletePostDto): Promise<PostDto> {
-    return this.postService.deleteUser(data);
+    return this.postService.deleteEntity(data);
   }
 }

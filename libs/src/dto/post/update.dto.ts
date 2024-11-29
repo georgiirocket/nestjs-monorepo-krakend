@@ -6,8 +6,8 @@ import { IsInt, IsString, MinLength, IsOptional } from 'class-validator';
  */
 export class UpdatePostDto {
   @IsInt()
-  @ApiProperty({ example: 1, required: true })
-  id: number;
+  @ApiProperty({ example: 'string', required: true })
+  id: string;
 
   @IsString()
   @IsOptional()

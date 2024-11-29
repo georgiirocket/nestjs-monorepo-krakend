@@ -67,7 +67,7 @@ export class UserController {
   @Patch('update')
   @MessagePattern(USER_PATTERNS.UPDATE_USER)
   async updateEntity(data: UpdateUserDto): Promise<UserDto> {
-    const existUser = await this.userService.checkExistUser(data.name);
+    const existUser = await this.userService.checkExistUser(data.id);
 
     if (existUser) {
       throw new Error('Choose another user');

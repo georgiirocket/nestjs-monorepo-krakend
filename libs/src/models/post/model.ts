@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
  * Dto
  */
 export class PostModel implements Post {
-  @ApiProperty({ example: 'sdckksdcn' })
+  @ApiProperty({ example: 'string' })
   id: string;
 
   @ApiProperty({ example: 'Title' })
@@ -20,6 +20,6 @@ export class PostModel implements Post {
   @ApiProperty({ example: '2024-11-21T16:38:56Z' })
   updatedAt: Date;
 
-  @ApiProperty({ example: 'mskdlmcm' })
+  @ApiProperty({ example: 'string' })
   authorId: string;
 }

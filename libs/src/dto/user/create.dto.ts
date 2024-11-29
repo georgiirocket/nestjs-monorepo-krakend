@@ -15,6 +15,6 @@ export class CreateUserDto {
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'password too weak',
   })
-  @ApiProperty({ example: 'jsvjbshfvbhbv645', required: true })
+  @ApiProperty({ example: 'password', required: true })
   password: string;
 }

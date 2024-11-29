@@ -17,10 +17,10 @@ export class UserModel implements User {
   password: string;
 
   @ApiProperty({ example: 'User' })
-  role: Role;
+  role: User['role'];
 
   @ApiProperty({ example: 'image.png' })
-  imageUrl: string;
+  imageUrl: string | null;
 
   @ApiProperty({ example: 'Joi' })
   name: string;
