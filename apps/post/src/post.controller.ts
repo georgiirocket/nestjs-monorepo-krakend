@@ -67,7 +67,6 @@ export class PostController {
 
   /**
    * Update post
-   * @param data
    */
   @ApiOkResponse({ type: PostDto })
   @Patch('update')
