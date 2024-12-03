@@ -1,6 +1,6 @@
 import { PrismaService } from '@app/libs/modules/database/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { UserModel } from '@app/libs/models/user/model';
+import { Role, UserModel } from '@app/libs/models/user/model';
 import { userSelect } from './constants/user-select';
 import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -35,11 +35,13 @@ export class UserService {
 
   /**
    * Create entity
-   * @param data
    */
-  async createEntity(data: CreateUserDto): Promise<UserDto> {
+  async createEntity(
+    data: CreateUserDto,
+    isFirstUser: boolean,
+  ): Promise<UserDto> {
     return this.prismaService.user.create({
-      data,
+      data: { ...data, ...(isFirstUser && { role: Role.ADMIN }) },
       select: userSelect,
     });
   }
@@ -74,5 +76,12 @@ export class UserService {
    */
   async checkExistUser(email: string): Promise<UserModel | null> {
     return this.prismaService.user.findUnique({ where: { email } });
+  }
+
+  /**
+   * Get entities count
+   */
+  async getEntitiesCount(): Promise<number> {
+    return this.prismaService.user.count();
   }
 }

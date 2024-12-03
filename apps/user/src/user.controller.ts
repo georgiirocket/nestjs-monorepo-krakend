@@ -87,7 +87,12 @@ export class UserController {
         ),
     );
 
-    return this.userService.createEntity({ email: data.email, password: hash });
+    const isFirstUser = !!(await this.userService.getEntitiesCount());
+
+    return this.userService.createEntity(
+      { email: data.email, password: hash },
+      isFirstUser,
+    );
   }
 
   /**
