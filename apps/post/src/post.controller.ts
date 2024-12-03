@@ -1,61 +1,50 @@
-import { Controller, Delete, Get, Inject, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { PostService } from './post.service';
-import { ClientProxy, MessagePattern } from '@nestjs/microservices';
-import { EntityDto } from '@app/libs/dto/entity.dto';
-import { POST_PATTERNS } from '@app/libs/constants/patterns/post';
-import { PostDto } from '@app/libs/dto/post/post.dto';
-import { CreatePostDto } from '@app/libs/dto/post/create.dto';
-import { UpdatePostDto } from '@app/libs/dto/post/update.dto';
-import { DeletePostDto } from '@app/libs/dto/post/delete.dto';
-import { SERVICE_NAMES } from '@app/libs/constants/services';
-import { catchError, firstValueFrom } from 'rxjs';
-import { UserDto } from '@app/libs/dto/user/user.dto';
-import { USER_PATTERNS } from '@app/libs/constants/patterns/user';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { PostDto } from './dto/post.dto';
+import { JwtAuthGuard } from '@app/libs/guards/jwt-auth';
+import { TokenPayloadParams } from '@app/libs/decorators/token-payload';
+import { TokenPayload } from '@app/libs/dto/auth/token-payload';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @ApiTags('Posts')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('posts')
 export class PostController {
-  constructor(
-    private readonly postService: PostService,
-    @Inject(SERVICE_NAMES.USER) private readonly userService: ClientProxy,
-  ) {}
-
-  /**
-   * Get user by id
-   * @param id
-   * @private
-   */
-  private getUserById(id: string): Promise<UserDto> {
-    return firstValueFrom(
-      this.userService
-        .send<UserDto, EntityDto>(USER_PATTERNS.GET_USER, { entityId: id })
-        .pipe(
-          catchError((error) => {
-            throw new Error(error);
-          }),
-        ),
-    );
-  }
+  constructor(private readonly postService: PostService) {}
 
   /**
    * Get posts
    */
   @ApiOkResponse({ type: [PostDto] })
   @Get('list')
-  @MessagePattern(POST_PATTERNS.GET_POSTS)
-  async getList(): Promise<PostDto[]> {
-    return await this.postService.getList();
+  async getList(
+    @TokenPayloadParams() { userId }: TokenPayload,
+  ): Promise<PostDto[]> {
+    return await this.postService.getList(userId);
   }
 
   /**
    * Get post by id
    */
   @ApiOkResponse({ type: PostDto })
-  @Get('view/:id')
-  @MessagePattern(POST_PATTERNS.GET_POST)
-  async getView(data: EntityDto): Promise<PostDto> {
-    const post = await this.postService.getView(data.entityId);
+  @Get('view/:postId')
+  async getView(
+    @TokenPayloadParams() { userId }: TokenPayload,
+    @Param() { postId }: { postId: string },
+  ): Promise<PostDto> {
+    const post = await this.postService.getView(userId, postId);
 
     if (!post) {
       throw new Error('Post not found');
@@ -69,10 +58,11 @@ export class PostController {
    */
   @ApiOkResponse({ type: PostDto })
   @Post('create')
-  @MessagePattern(POST_PATTERNS.CREATE_POST)
-  async createEntity(data: CreatePostDto): Promise<PostDto> {
-    // await this.getUserById(data.authorId);
-    return this.postService.createEntity(data);
+  async createEntity(
+    @TokenPayloadParams() { userId }: TokenPayload,
+    @Body() data: CreatePostDto,
+  ): Promise<PostDto> {
+    return this.postService.createEntity(userId, data);
   }
 
   /**
@@ -81,19 +71,22 @@ export class PostController {
    */
   @ApiOkResponse({ type: PostDto })
   @Patch('update')
-  @MessagePattern(POST_PATTERNS.UPDATE_POST)
-  async updateEntity(data: UpdatePostDto): Promise<PostDto> {
-    return this.postService.updateEntity(data);
+  async updateEntity(
+    @TokenPayloadParams() { userId }: TokenPayload,
+    @Body() data: UpdatePostDto,
+  ): Promise<PostDto> {
+    return this.postService.updateEntity(userId, data);
   }
 
   /**
    * Delete post
-   * @param data
    */
   @ApiOkResponse({ type: PostDto })
-  @Delete('delete')
-  @MessagePattern(POST_PATTERNS.DELETE_POST)
-  async deleteEntity(data: DeletePostDto): Promise<PostDto> {
-    return this.postService.deleteEntity(data);
+  @Delete('delete/:postId')
+  async deleteEntity(
+    @TokenPayloadParams() { userId }: TokenPayload,
+    @Param() { postId }: { postId: string },
+  ): Promise<PostDto> {
+    return this.postService.deleteEntity(userId, postId);
   }
 }

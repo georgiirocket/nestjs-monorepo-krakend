@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id        String   @id @unique @default(uuid())
-  name      String   @unique
+  email     String   @unique
   password  String
   role      Role     @default(USER)
   imageUrl  String?

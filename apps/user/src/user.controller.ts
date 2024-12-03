@@ -1,13 +1,29 @@
-import { Controller, Delete, Get, Patch, Post } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
-import { UserDto } from '@app/libs/dto/user/user.dto';
-import { EntityDto } from '@app/libs/dto/entity.dto';
-import { CreateUserDto } from '@app/libs/dto/user/create.dto';
-import { UpdateUserDto } from '@app/libs/dto/user/update.dto';
-import { DeleteUserDto } from '@app/libs/dto/user/delete.dto';
-import { USER_PATTERNS } from '@app/libs/constants/patterns/user';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  InternalServerErrorException,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { UserService } from './user.service';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from '@app/libs/decorators/roles';
+import { Role } from '@app/libs/models/user/model';
+import { JwtAuthGuard } from '@app/libs/guards/jwt-auth';
+import { RoleGuard } from '@app/libs/guards/role';
+import { TokenPayloadParams } from '@app/libs/decorators/token-payload';
+import { TokenPayload } from '@app/libs/dto/auth/token-payload';
+import { catchError, firstValueFrom } from 'rxjs';
+import { AUTH_PATTERNS } from '@app/libs/constants/patterns/auth';
+import { SERVICE_NAMES } from '@app/libs/constants/services';
+import { UserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 /**
  * Controller
@@ -15,14 +31,19 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 @ApiTags('Users')
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    @Inject(SERVICE_NAMES.AUTH) private readonly authServices: ClientProxy,
+  ) {}
 
   /**
    * Get users
    */
   @ApiOkResponse({ type: [UserDto] })
+  @ApiBearerAuth()
   @Get('list')
-  @MessagePattern(USER_PATTERNS.GET_USERS)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RoleGuard)
   async getList(): Promise<UserDto[]> {
     return await this.userService.getList();
   }
@@ -31,10 +52,11 @@ export class UserController {
    * Get user by id
    */
   @ApiOkResponse({ type: UserDto })
-  @Get('view/:id')
-  @MessagePattern(USER_PATTERNS.GET_USER)
-  async getView(data: EntityDto): Promise<UserDto> {
-    const user = await this.userService.getView(data.entityId);
+  @ApiBearerAuth()
+  @Get('view')
+  @UseGuards(JwtAuthGuard)
+  async getView(@TokenPayloadParams() data: TokenPayload): Promise<UserDto> {
+    const user = await this.userService.getView(data.userId);
 
     if (!user) {
       throw new Error('User not found');
@@ -48,32 +70,56 @@ export class UserController {
    */
   @ApiOkResponse({ type: UserDto })
   @Post('create')
-  @MessagePattern(USER_PATTERNS.CREATE_USER)
-  async createEntity(data: CreateUserDto): Promise<UserDto> {
-    const existUser = await this.userService.checkExistUser(data.name);
+  async createEntity(@Body() data: CreateUserDto): Promise<UserDto> {
+    const existUser = await this.userService.checkExistUser(data.email);
 
     if (existUser) {
       throw new Error('Choose another user');
     }
 
-    return this.userService.createEntity(data);
+    const hash = await firstValueFrom(
+      this.authServices
+        .send<string, string>(AUTH_PATTERNS.CREATE_HASH_PASSWORD, data.password)
+        .pipe(
+          catchError((error) => {
+            throw new InternalServerErrorException(error);
+          }),
+        ),
+    );
+
+    return this.userService.createEntity({ email: data.email, password: hash });
   }
 
   /**
    * Update user
-   * @param data
    */
   @ApiOkResponse({ type: UserDto })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Patch('update')
-  @MessagePattern(USER_PATTERNS.UPDATE_USER)
-  async updateEntity(data: UpdateUserDto): Promise<UserDto> {
-    const existUser = await this.userService.checkExistUser(data.id);
+  async updateEntity(
+    @Body() userData: UpdateUserDto,
+    @TokenPayloadParams() data: TokenPayload,
+  ): Promise<UserDto> {
+    const { email, password } = userData;
 
-    if (existUser) {
+    if (email && (await this.userService.checkExistUser(email))) {
       throw new Error('Choose another user');
     }
 
-    return this.userService.updateEntity(data);
+    if (password) {
+      userData.password = await firstValueFrom(
+        this.authServices
+          .send<string, string>(AUTH_PATTERNS.CREATE_HASH_PASSWORD, password)
+          .pipe(
+            catchError((error) => {
+              throw new InternalServerErrorException(error);
+            }),
+          ),
+      );
+    }
+
+    return this.userService.updateEntity(data.userId, userData);
   }
 
   /**
@@ -81,9 +127,12 @@ export class UserController {
    * @param data
    */
   @ApiOkResponse({ type: UserDto })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
   @Delete('delete')
-  @MessagePattern(USER_PATTERNS.DELETE_USER)
-  async deleteEntity(data: DeleteUserDto): Promise<UserDto> {
-    return this.userService.deleteUser(data);
+  async deleteEntity(
+    @TokenPayloadParams() data: TokenPayload,
+  ): Promise<UserDto> {
+    return this.userService.deleteUser(data.userId);
   }
 }

@@ -11,6 +11,6 @@ import { SERVICE_NAMES } from '@app/libs/constants/services';
 @Module({
   imports: [PrismaModule],
   controllers: [PostController],
-  providers: [PostService, MicroService.register(SERVICE_NAMES.USER)],
+  providers: [PostService, MicroService.register(SERVICE_NAMES.AUTH)],
 })
 export class PostModule {}

@@ -22,8 +22,8 @@ export class UserModel implements User {
   @ApiProperty({ example: 'image.png' })
   imageUrl: string | null;
 
-  @ApiProperty({ example: 'Joi' })
-  name: string;
+  @ApiProperty({ example: 'Joi@gmail.com' })
+  email: string;
 
   @ApiProperty({ example: '2024-11-21T16:38:56Z' })
   createdAt: Date;

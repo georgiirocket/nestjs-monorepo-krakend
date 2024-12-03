@@ -1,10 +1,9 @@
 import {
-  IsInt,
+  IsEmail,
   IsOptional,
   IsString,
   Matches,
   MinLength,
-  IsNotEmpty,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -13,15 +12,11 @@ import { ApiProperty } from '@nestjs/swagger';
  */
 export class UpdateUserDto {
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ example: 'smdkckmc', required: true })
-  id: string;
-
-  @IsString()
+  @IsEmail()
   @IsOptional()
   @MinLength(2)
-  @ApiProperty({ example: 'Piter', required: false })
-  name?: string;
+  @ApiProperty({ example: 'Piter@test.com', required: false })
+  email?: string;
 
   @IsString()
   @IsOptional()

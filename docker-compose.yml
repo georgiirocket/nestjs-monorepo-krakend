@@ -1,4 +1,18 @@
 services:
+  #Auth service (api)
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: production
+    profiles: [ 'prod' ]
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+
   #Post service (api)
   post:
     build:

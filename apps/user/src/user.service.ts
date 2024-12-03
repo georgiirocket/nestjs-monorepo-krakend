@@ -1,11 +1,10 @@
 import { PrismaService } from '@app/libs/modules/database/prisma.service';
-import { UserDto } from '@app/libs/dto/user/user.dto';
-import { CreateUserDto } from '@app/libs/dto/user/create.dto';
-import { UpdateUserDto } from '@app/libs/dto/user/update.dto';
-import { DeleteUserDto } from '@app/libs/dto/user/delete.dto';
 import { Injectable } from '@nestjs/common';
 import { UserModel } from '@app/libs/models/user/model';
 import { userSelect } from './constants/user-select';
+import { UserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 /**
  * Service
@@ -47,31 +46,33 @@ export class UserService {
 
   /**
    * Update entity
-   * @param data
    */
-  async updateEntity(data: UpdateUserDto): Promise<UserDto> {
+  async updateEntity(id: string, data: UpdateUserDto): Promise<UserDto> {
     return this.prismaService.user.update({
-      where: { id: data.id },
-      data: { name: data.name },
+      where: { id: id },
+      data: {
+        ...(data.email && { email: data.email }),
+        ...(data.password && { email: data.password }),
+        ...(data.imageUrl && { email: data.imageUrl }),
+      },
     });
   }
 
   /**
    * Delete entity
-   * @param data
    */
-  async deleteUser(data: DeleteUserDto): Promise<UserDto> {
+  async deleteUser(id: string): Promise<UserDto> {
     return this.prismaService.user.delete({
-      where: data,
+      where: { id },
       select: userSelect,
     });
   }
 
   /**
    * Check exist user
-   * @param id
+   * @param email
    */
-  async checkExistUser(id: string): Promise<UserModel | null> {
-    return this.prismaService.user.findUnique({ where: { id } });
+  async checkExistUser(email: string): Promise<UserModel | null> {
+    return this.prismaService.user.findUnique({ where: { email } });
   }
 }
