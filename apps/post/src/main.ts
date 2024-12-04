@@ -19,7 +19,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api-documentation', app, document);
+  SwaggerModule.setup('posts/api-documentation', app, document);
 
   await app.listen(process.env.POST_APP_PORT as string);
 }

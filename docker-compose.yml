@@ -55,6 +55,7 @@ services:
       postgresql-prod:
         condition: service_healthy
 
+
   #Prod database
   postgresql-prod:
     image: 'bitnami/postgresql:latest'
@@ -70,7 +71,19 @@ services:
       timeout: 10s
       retries: 5
 
+  #Nginx proxy
+  nginx-prod:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    profiles: [ 'prod' ]
+    ports:
+      - "3000:80"
 
+  #--Development--#
   #Dev database
   postgresql-dev:
     image: 'bitnami/postgresql:latest'
@@ -82,6 +95,18 @@ services:
       - 'postgresql-dev:/bitnami/postgresql'
     env_file:
       - ./.env
+
+  #Nginx proxy
+  nginx-dev:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    profiles: [ 'dev' ]
+    ports:
+      - "3000:80"
 
 volumes:
   postgresql-dev:
