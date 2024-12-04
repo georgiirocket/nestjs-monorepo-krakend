@@ -74,7 +74,7 @@ export class UserController {
     const existUser = await this.userService.checkExistUser(data.email);
 
     if (existUser) {
-      throw new Error('Choose another user');
+      throw new InternalServerErrorException('Choose another user');
     }
 
     const hash = await firstValueFrom(
@@ -87,11 +87,11 @@ export class UserController {
         ),
     );
 
-    const isFirstUser = !!(await this.userService.getEntitiesCount());
+    const userCount = await this.userService.getEntitiesCount();
 
     return this.userService.createEntity(
       { email: data.email, password: hash },
-      isFirstUser,
+      userCount === 0,
     );
   }
 

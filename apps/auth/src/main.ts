@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './auth.module';
 import { MicroService } from '@app/libs/services/micro/service';
 import { SERVICE_NAMES } from '@app/libs/constants/services';
-import { ExceptionUpFilter } from '@app/libs/filters/exception-up.filter';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
@@ -20,12 +19,12 @@ async function bootstrap() {
     .build();
 
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new ExceptionUpFilter(SERVICE_NAMES.AUTH));
   app.connectMicroservice(MicroService.getOptions(SERVICE_NAMES.AUTH));
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('auth/api-documentation', app, document);
 
+  await app.startAllMicroservices();
   await app.listen(process.env.AUTH_APP_PORT as string);
 }
 

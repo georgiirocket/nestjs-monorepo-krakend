@@ -1,6 +1,6 @@
 import { PrismaService } from '@app/libs/modules/database/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { Role, UserModel } from '@app/libs/models/user/model';
+import { UserModel } from '@app/libs/models/user/model';
 import { userSelect } from './constants/user-select';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -41,7 +41,7 @@ export class UserService {
     isFirstUser: boolean,
   ): Promise<UserDto> {
     return this.prismaService.user.create({
-      data: { ...data, ...(isFirstUser && { role: Role.ADMIN }) },
+      data: { ...data, ...(isFirstUser && { role: 'ADMIN' }) },
       select: userSelect,
     });
   }
