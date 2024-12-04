@@ -2,9 +2,9 @@ import { PrismaService } from '@app/libs/modules/database/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { Role, UserModel } from '@app/libs/models/user/model';
 import { userSelect } from './constants/user-select';
-import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from '@app/libs/dto/user/user.dto';
 
 /**
  * Service

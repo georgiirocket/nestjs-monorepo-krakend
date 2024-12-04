@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TokenService } from './services/token.service';
 import { PasswordService } from './services/password.service';
 import { CommunicationController } from './communication.controller';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { CommunicationController } from './communication.controller';
     }),
   ],
   controllers: [AuthController, CommunicationController],
-  providers: [TokenService, PasswordService],
+  providers: [TokenService, PasswordService, AuthService],
 })
 export class AuthModule {}

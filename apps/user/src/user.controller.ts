@@ -21,9 +21,9 @@ import { TokenPayload } from '@app/libs/dto/auth/token-payload';
 import { catchError, firstValueFrom } from 'rxjs';
 import { AUTH_PATTERNS } from '@app/libs/constants/patterns/auth';
 import { SERVICE_NAMES } from '@app/libs/constants/services';
-import { UserDto } from './dto/user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from '@app/libs/dto/user/user.dto';
 
 /**
  * Controller
