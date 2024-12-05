@@ -13,7 +13,7 @@ services:
       migration:
         condition: service_completed_successfully
 
-  #Post service (api)
+  #Post (api)
   post:
     build:
       context: .
@@ -27,11 +27,25 @@ services:
       migration:
         condition: service_completed_successfully
 
-  #User service (api)
+  #User (api)
   user:
     build:
       context: .
       dockerfile: ./apps/user/Dockerfile
+      target: production
+    profiles: [ 'prod' ]
+    restart: unless-stopped
+    env_file:
+      - ./.env.production
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+
+  #File (api)
+  file:
+    build:
+      context: .
+      dockerfile: ./apps/file/Dockerfile
       target: production
     profiles: [ 'prod' ]
     restart: unless-stopped

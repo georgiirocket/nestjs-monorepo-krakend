@@ -1,27 +1,27 @@
 import { NestFactory } from '@nestjs/core';
-import { UserModule } from './user.module';
-import { ValidationPipe } from '@nestjs/common';
+import { FileModule } from './file.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 /**
- * User app
+ * File app
  */
 async function bootstrap() {
-  const app = await NestFactory.create(UserModule);
+  const app = await NestFactory.create(FileModule);
 
   const config = new DocumentBuilder()
     .setTitle('Nestjs monorepo')
     .setDescription('Description for API')
     .setVersion('1.0')
-    .addTag('User app')
+    .addTag('File app')
     .build();
 
   app.useGlobalPipes(new ValidationPipe());
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('users/api-documentation', app, document);
+  SwaggerModule.setup('file/api-documentation', app, document);
 
-  await app.listen(process.env.USER_APP_PORT as string);
+  await app.listen(process.env.FILE_APP_PORT as string);
 }
 
 void bootstrap();

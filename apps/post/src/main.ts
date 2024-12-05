@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 
 /**
- * Post app (service)
+ * Post app
  */
 async function bootstrap() {
   const app = await NestFactory.create(PostModule);
