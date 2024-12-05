@@ -54,9 +54,10 @@ export class UserService {
       where: { id: id },
       data: {
         ...(data.email && { email: data.email }),
-        ...(data.password && { email: data.password }),
-        ...(data.imageUrl && { email: data.imageUrl }),
+        ...(data.password && { password: data.password }),
+        ...(typeof data.imageUrl === 'string' && { imageUrl: data.imageUrl }),
       },
+      select: userSelect,
     });
   }
 

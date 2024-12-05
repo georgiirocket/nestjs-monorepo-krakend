@@ -20,7 +20,7 @@ export class UserModel implements User {
   role: User['role'];
 
   @ApiProperty({ example: 'image.png' })
-  imageUrl: string | null;
+  imageUrl: string;
 
   @ApiProperty({ example: 'Joi@gmail.com' })
   email: string;

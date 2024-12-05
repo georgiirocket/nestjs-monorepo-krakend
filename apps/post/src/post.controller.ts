@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -47,7 +48,7 @@ export class PostController {
     const post = await this.postService.getView(userId, postId);
 
     if (!post) {
-      throw new Error('Post not found');
+      throw new NotFoundException('Post not found');
     }
 
     return post;

@@ -22,7 +22,11 @@ export class JwtRefreshGuard implements CanActivate {
       throw new UnauthorizedException('Invalid type token');
     }
 
-    const payload = await this.tokenService.verifyToken(token ?? '');
+    const payload = await this.tokenService
+      .verifyToken(token ?? '')
+      .catch((error) => {
+        throw new UnauthorizedException(error);
+      });
 
     if (payload.type !== 'refresh') {
       throw new UnauthorizedException('Invalid type token');

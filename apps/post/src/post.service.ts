@@ -15,7 +15,7 @@ export class PostService {
    * Get entities
    */
   async getList(userId: string): Promise<PostDto[]> {
-    return this.prismaService.post.findMany({ where: { id: userId } });
+    return this.prismaService.post.findMany({ where: { authorId: userId } });
   }
 
   /**

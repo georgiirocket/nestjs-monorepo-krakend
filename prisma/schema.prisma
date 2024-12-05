@@ -12,7 +12,7 @@ model User {
   email     String   @unique
   password  String
   role      Role     @default(USER)
-  imageUrl  String?
+  imageUrl  String   @default("")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts     Post[]

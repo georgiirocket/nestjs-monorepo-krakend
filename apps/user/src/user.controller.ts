@@ -1,10 +1,12 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Inject,
   InternalServerErrorException,
+  NotFoundException,
   Patch,
   Post,
   UseGuards,
@@ -59,7 +61,7 @@ export class UserController {
     const user = await this.userService.getView(data.userId);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
 
     return user;
@@ -74,7 +76,7 @@ export class UserController {
     const existUser = await this.userService.checkExistUser(data.email);
 
     if (existUser) {
-      throw new InternalServerErrorException('Choose another user');
+      throw new BadRequestException('Choose another user');
     }
 
     const hash = await firstValueFrom(
