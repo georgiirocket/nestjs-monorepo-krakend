@@ -1,10 +1,11 @@
 ## Monorepo
 
-Implementation nestjs-monorepo (microservices)
+- Implementation nestjs-monorepo (microservices)
+- This repository shows how you can organize the structure in monorepo.
+- Feel free to copy, add and use this
+- This backend structure is suitable for small applications.
 
-This repository shows how you can organize the structure in monorepo.
-
-Feel free to copy, add and use this
+Here Nginx is used as a proxy server. If you have it in production, it is not in docker. You can configure it yourself
 
 ## Tools used
 
@@ -55,7 +56,9 @@ docker-compose --profile prod up -d
 
 After the start applications:
 
--  [Swagger](http://localhost:3000/api-documentation)
+-  [Swagger-Users](http://localhost:3000/users/api-documentation)
+-  [Swagger-Auth](http://localhost:3000/auth/api-documentation)
+-  [Swagger-Posts](http://localhost:3000/posts/api-documentation)
 
 ## Postman
 
@@ -67,21 +70,25 @@ If you want to test endpoints. You can import this file in Postman
 
 ```mermaid
   flowchart TD
-    G[KrakenD Gateway]
+    G[Nginx Proxy]
     D[Database]
 
     subgraph Services
-        s1[User service]
-        s2[Post service]
-        s3[Auth service]
+        s1[User app]
+        s2[Post app]
+        s2[Post app]
+        s3[Auth app, service]
+        s4[File app]
     end
 
     G --> s1
     G --> s3
     G --> s2
+    G --> s4
     s1 --> D
     s2 --> D
     s3 --> D
+    s4 --> D
 ```
 
 ```
