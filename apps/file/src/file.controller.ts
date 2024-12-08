@@ -116,13 +116,13 @@ export class FileController {
   /**
    * Delete entity
    */
-  @Delete('delete/:id')
+  @Delete('delete/:filename')
   @ApiOkResponse({ type: FileDto })
   async deleteEntity(
-    @Param() { id }: { id: string },
+    @Param() { filename }: { filename: string },
     @TokenPayloadParams() { userId }: TokenPayload,
   ): Promise<FileDto> {
-    const fileData = await this.fileService.deleteFile(userId, id);
+    const fileData = await this.fileService.deleteFile(userId, filename);
 
     return FileDto.omitFileModel(fileData);
   }

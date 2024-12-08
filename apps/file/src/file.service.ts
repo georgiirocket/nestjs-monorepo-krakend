@@ -30,11 +30,11 @@ export class FileService {
   /**
    * Delete file
    * @param authorId
-   * @param id
+   * @param filename
    */
-  async deleteFile(authorId: string, id: string): Promise<FileModel> {
+  async deleteFile(authorId: string, filename: string): Promise<FileModel> {
     return this.prismaService.file.update({
-      where: { id, authorId },
+      where: { filename, authorId },
       data: { isDelete: true },
     });
   }

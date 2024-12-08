@@ -40,7 +40,7 @@ export class TokenService {
 
     const accessToken = await this.jwtService.signAsync(
       { type: 'access', ...data } as TokenPayload,
-      { expiresIn: expiresInAccess },
+      { expiresIn: `${expiresInAccess}h` },
     );
 
     const refreshToken = await this.jwtService.signAsync(
@@ -49,7 +49,7 @@ export class TokenService {
         partAccessString: this.getLastPartOfString(accessToken),
         ...data,
       } as TokenPayload,
-      { expiresIn: expiresInRefresh },
+      { expiresIn: `${expiresInRefresh}d` },
     );
 
     return {
@@ -64,7 +64,11 @@ export class TokenService {
    * Verify token
    * @param token
    */
-  async verifyToken(token: string): Promise<TokenPayload> {
-    return this.jwtService.verify<TokenPayload>(token);
+  async verifyToken(
+    token: string,
+  ): Promise<TokenPayload & { iat: number; exp: number }> {
+    return this.jwtService.verify<TokenPayload & { iat: number; exp: number }>(
+      token,
+    );
   }
 }

@@ -35,7 +35,7 @@ model File {
   encoding     String
   mimetype     String
   destination  String
-  filename     String
+  filename     String   @unique
   path         String
   size         Int
   createdAt    DateTime @default(now())
