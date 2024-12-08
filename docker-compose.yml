@@ -64,7 +64,6 @@ services:
       dockerfile: ./Dockerfile
       target: production
     profiles: [ 'prod' ]
-    restart: no
     env_file:
       - ./.env.production
     depends_on:
