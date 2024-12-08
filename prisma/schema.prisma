@@ -29,7 +29,7 @@ model Post {
 }
 
 model File {
-  id           String  @id @unique @default(uuid())
+  id           String   @id @unique @default(uuid())
   fieldname    String
   originalname String
   encoding     String
@@ -38,7 +38,10 @@ model File {
   filename     String
   path         String
   size         Int
-  isDelete     Boolean @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  isDelete     Boolean  @default(false)
+  authorId     String
 }
 
 enum Role {

@@ -8,6 +8,8 @@ import { destination } from '@app/libs/constants';
 import { storage } from './common/stotage';
 import { MicroService } from '@app/libs/services/micro/service';
 import { SERVICE_NAMES } from '@app/libs/constants/services';
+import { CronService } from './services/cron.services';
+import { CronController } from './cron.controller';
 
 @Module({
   imports: [
@@ -18,7 +20,11 @@ import { SERVICE_NAMES } from '@app/libs/constants/services';
       storage,
     }),
   ],
-  controllers: [FileController],
-  providers: [FileService, MicroService.register(SERVICE_NAMES.AUTH)],
+  controllers: [FileController, CronController],
+  providers: [
+    FileService,
+    CronService,
+    MicroService.register(SERVICE_NAMES.AUTH),
+  ],
 })
 export class FileModule {}
