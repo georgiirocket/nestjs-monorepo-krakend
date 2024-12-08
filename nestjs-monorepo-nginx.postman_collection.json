@@ -1,0 +1,426 @@
+{
+	"info": {
+		"_postman_id": "0bd4a45b-6e8d-40b6-915a-feffce5437da",
+		"name": "nestjs-monorepo-nginx",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14222084"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@test.com\", \n    \"password\": \"84g730SUaYX16HBd1syN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{users}}/create",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/list",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "view",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/view",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"view"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"imageUrl\": \"5cbb110c8e47b1dc2c8efd266d439a674.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{users}}/update",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{users}}/delete",
+							"host": [
+								"{{users}}"
+							],
+							"path": [
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@test.com\", \n    \"password\": \"84g730SUaYX16HBd1syN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{auth}}/login",
+							"host": [
+								"{{auth}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh-token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoicmVmcmVzaCIsInBhcnRBY2Nlc3NTdHJpbmciOiJQT09ZY1EiLCJ1c2VySWQiOiIwZjZmNTE2Yi1jOGM0LTRiMzYtOTExYS03YWE1NTM5ZjQ3NjEiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MzMzOTg0NzgsImV4cCI6MTczNTczNjY3Njc1OX0.YRWNXkldEZjRlOrxPkO5R6R8yAyijJhFwasG2GZWiu0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{auth}}/refresh-token",
+							"host": [
+								"{{auth}}"
+							],
+							"path": [
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{posts}}/list",
+							"host": [
+								"{{posts}}"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "view",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{posts}}/view/bca8ade3-38f8-4926-bc41-9347aed8a08b",
+							"host": [
+								"{{posts}}"
+							],
+							"path": [
+								"view",
+								"bca8ade3-38f8-4926-bc41-9347aed8a08b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Title 3\",\n  \"description\": \"Hello world\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{posts}}/create",
+							"host": [
+								"{{posts}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"bca8ade3-38f8-4926-bc41-9347aed8a08b\",\n  \"title\": \"Title 3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{posts}}/update",
+							"host": [
+								"{{posts}}"
+							],
+							"path": [
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{posts}}/delete/bca8ade3-38f8-4926-bc41-9347aed8a08b",
+							"host": [
+								"{{posts}}"
+							],
+							"path": [
+								"delete",
+								"bca8ade3-38f8-4926-bc41-9347aed8a08b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "file",
+			"item": [
+				{
+					"name": "view",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{file}}/view/9df108a46010751cbf2b2e7ecefb53fea5.jpg",
+							"host": [
+								"{{file}}"
+							],
+							"path": [
+								"view",
+								"9df108a46010751cbf2b2e7ecefb53fea5.jpg"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/georgeyromanishko/Downloads/pietro-dona-rPFwyWaie7w-unsplash.jpg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{file}}/create",
+							"host": [
+								"{{file}}"
+							],
+							"path": [
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "download",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{file}}/download/5cbb110c8e47b1dc2c8efd266d439a674.jpg",
+							"host": [
+								"{{file}}"
+							],
+							"path": [
+								"download",
+								"5cbb110c8e47b1dc2c8efd266d439a674.jpg"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{file}}/delete/5cbb110c8e47b1dc2c8efd266d439a674.jpg",
+							"host": [
+								"{{file}}"
+							],
+							"path": [
+								"delete",
+								"5cbb110c8e47b1dc2c8efd266d439a674.jpg"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwidXNlcklkIjoiYzRjMWYyOTQtMWIzMS00NDA4LWI4NmEtNThlMTE5M2QwMWZjIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzMzNjg5MDgyLCJleHAiOjYyNDEzMjEzMDkyOTk0ODJ9.pXXezhjw9whCUx0xdQbF53Yq51yAvx9s3EJA8u04fRQ",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "auth",
+			"value": "http://localhost:3000/auth",
+			"type": "string"
+		},
+		{
+			"key": "users",
+			"value": "http://localhost:3000/users",
+			"type": "string"
+		},
+		{
+			"key": "posts",
+			"value": "http://localhost:3000/posts",
+			"type": "string"
+		},
+		{
+			"key": "file",
+			"value": "http://localhost:3000/file",
+			"type": "string"
+		}
+	]
+}

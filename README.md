@@ -59,12 +59,13 @@ After the start applications:
 -  [Swagger-Users](http://localhost:3000/users/api-documentation)
 -  [Swagger-Auth](http://localhost:3000/auth/api-documentation)
 -  [Swagger-Posts](http://localhost:3000/posts/api-documentation)
+-  [Swagger-File](http://localhost:3000/file/api-documentation)
 
 ## Postman
 
 If you want to test endpoints. You can import this file in Postman
 
-- nestjs-monorepo.postman_collection.json
+- nestjs-monorepo-nginx.postman_collection.json
 
 ## Structure
 
@@ -96,21 +97,50 @@ If you want to test endpoints. You can import this file in Postman
 ├── Dockerfile
 ├── README.md
 ├── apps
-│   ├── gateway
+│   ├── auth
 │   │   ├── Dockerfile
 │   │   ├── src
-│   │   │   ├── gateway.module.ts
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.module.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── communication.controller.ts
+│   │   │   ├── constants
+│   │   │   │   └── index.ts
+│   │   │   ├── dto
+│   │   │   │   ├── login-req.dto.ts
+│   │   │   │   ├── login-res.dto.ts
+│   │   │   │   └── refresh-token.dto.ts
+│   │   │   ├── guards
+│   │   │   │   └── jwt-refresh.ts
 │   │   │   ├── main.ts
-│   │   │   ├── post
-│   │   │   │   ├── post.controller.ts
-│   │   │   │   └── post.module.ts
-│   │   │   └── user
-│   │   │       ├── user.controller.ts
-│   │   │       └── user.module.ts
+│   │   │   └── services
+│   │   │       ├── password.service.ts
+│   │   │       └── token.service.ts
+│   │   └── tsconfig.app.json
+│   ├── file
+│   │   ├── Dockerfile
+│   │   ├── src
+│   │   │   ├── common
+│   │   │   │   ├── create-schema.swagger.ts
+│   │   │   │   └── stotage.ts
+│   │   │   ├── communication.controller.ts
+│   │   │   ├── cron.controller.ts
+│   │   │   ├── dto
+│   │   │   │   └── file.dto.ts
+│   │   │   ├── file.controller.ts
+│   │   │   ├── file.module.ts
+│   │   │   ├── file.service.ts
+│   │   │   ├── main.ts
+│   │   │   └── services
+│   │   │       └── cron.services.ts
 │   │   └── tsconfig.app.json
 │   ├── post
 │   │   ├── Dockerfile
 │   │   ├── src
+│   │   │   ├── dto
+│   │   │   │   ├── create-post.dto.ts
+│   │   │   │   ├── post.dto.ts
+│   │   │   │   └── update-post.dto.ts
 │   │   │   ├── main.ts
 │   │   │   ├── post.controller.ts
 │   │   │   ├── post.module.ts
@@ -119,6 +149,11 @@ If you want to test endpoints. You can import this file in Postman
 │   └── user
 │       ├── Dockerfile
 │       ├── src
+│       │   ├── constants
+│       │   │   └── user-select.ts
+│       │   ├── dto
+│       │   │   ├── create-user.dto.ts
+│       │   │   └── update-user.dto.ts
 │       │   ├── main.ts
 │       │   ├── user.controller.ts
 │       │   ├── user.module.ts
@@ -129,24 +164,34 @@ If you want to test endpoints. You can import this file in Postman
 ├── libs
 │   ├── src
 │   │   ├── constants
+│   │   │   ├── index.ts
 │   │   │   ├── patterns
-│   │   │   │   ├── post.ts
-│   │   │   │   └── user.ts
+│   │   │   │   ├── auth.ts
+│   │   │   │   └── file.ts
 │   │   │   └── services.ts
+│   │   ├── decorators
+│   │   │   ├── roles.ts
+│   │   │   └── token-payload.ts
 │   │   ├── dto
+│   │   │   ├── auth
+│   │   │   │   ├── compare-password.ts
+│   │   │   │   ├── token-payload.ts
+│   │   │   │   └── tokens.ts
 │   │   │   ├── entity.dto.ts
-│   │   │   ├── post
-│   │   │   │   ├── create.dto.ts
-│   │   │   │   ├── delete.dto.ts
-│   │   │   │   ├── post.dto.ts
-│   │   │   │   └── update.dto.ts
 │   │   │   └── user
-│   │   │       ├── create.dto.ts
-│   │   │       ├── delete.dto.ts
-│   │   │       ├── update.dto.ts
 │   │   │       └── user.dto.ts
 │   │   ├── filters
 │   │   │   └── exception-up.filter.ts
+│   │   ├── guards
+│   │   │   ├── jwt-auth.ts
+│   │   │   └── role.ts
+│   │   ├── models
+│   │   │   ├── file
+│   │   │   │   └── model.ts
+│   │   │   ├── post
+│   │   │   │   └── model.ts
+│   │   │   └── user
+│   │   │       └── model.ts
 │   │   ├── modules
 │   │   │   └── database
 │   │   │       ├── prisma.module.ts
@@ -157,20 +202,12 @@ If you want to test endpoints. You can import this file in Postman
 │   └── tsconfig.lib.json
 ├── migration.sh
 ├── nest-cli.json
-├── nestjs-monorepo.postman_collection.json
+├── nginx
+│   ├── Dockerfile
+│   └── nginx.template.conf
 ├── package-lock.json
 ├── package.json
 ├── prisma
-│   ├── migrations
-│   │   ├── 20241121165743_init
-│   │   │   └── migration.sql
-│   │   ├── 20241121171613_adding_dates_fields
-│   │   │   └── migration.sql
-│   │   ├── 20241121182847_adding_cascade
-│   │   │   └── migration.sql
-│   │   ├── 20241122112740_uniq_name
-│   │   │   └── migration.sql
-│   │   └── migration_lock.toml
 │   └── schema.prisma
 ├── tsconfig.build.json
 └── tsconfig.json
