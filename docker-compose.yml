@@ -51,6 +51,8 @@ services:
     restart: unless-stopped
     env_file:
       - ./.env.production
+    volumes:
+      - file-storage:/app/storage
     depends_on:
       migration:
         condition: service_completed_successfully
@@ -96,6 +98,11 @@ services:
     profiles: [ 'prod' ]
     ports:
       - "3000:80"
+    depends_on:
+      - auth
+      - user
+      - file
+      - post
 
   #--Development--#
   #Dev database
@@ -125,3 +132,4 @@ services:
 volumes:
   postgresql-dev:
   postgresql-prod:
+  file-storage:
