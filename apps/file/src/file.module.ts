@@ -10,6 +10,7 @@ import { MicroService } from '@app/libs/services/micro/service';
 import { SERVICE_NAMES } from '@app/libs/constants/services';
 import { CronService } from './services/cron.services';
 import { CronController } from './cron.controller';
+import { CommunicationController } from './communication.controller';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { CronController } from './cron.controller';
       storage,
     }),
   ],
-  controllers: [FileController, CronController],
+  controllers: [FileController, CronController, CommunicationController],
   providers: [
     FileService,
     CronService,

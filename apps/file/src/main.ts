@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { FileModule } from './file.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { MicroService } from '@app/libs/services/micro/service';
+import { SERVICE_NAMES } from '@app/libs/constants/services';
 
 /**
  * File app
@@ -17,10 +19,12 @@ async function bootstrap() {
     .build();
 
   app.useGlobalPipes(new ValidationPipe());
+  app.connectMicroservice(MicroService.getOptions(SERVICE_NAMES.FILE));
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('file/api-documentation', app, document);
 
+  await app.startAllMicroservices();
   await app.listen(process.env.FILE_APP_PORT as string);
 }
 

@@ -1,0 +1,3 @@
+export enum FILE_PATTERNS {
+  REMOVE_BY_USER_ID = 'REMOVE_BY_USER_ID',
+}

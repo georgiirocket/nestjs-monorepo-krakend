@@ -40,6 +40,17 @@ export class FileService {
   }
 
   /**
+   * Delete by author id
+   * @param authorId
+   */
+  async deleteByAuthorId(authorId: string): Promise<void> {
+    await this.prismaService.file.updateMany({
+      where: { authorId },
+      data: { isDelete: true },
+    });
+  }
+
+  /**
    * Get stream
    */
   getStream(filename: string) {
