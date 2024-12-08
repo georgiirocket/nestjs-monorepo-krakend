@@ -28,6 +28,7 @@ import { TokenPayloadParams } from '@app/libs/decorators/token-payload';
 import { TokenPayload } from '@app/libs/dto/auth/token-payload';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileDto } from './dto/file.dto';
+import { createSchemaSwagger } from './common/create-schema.swagger';
 
 @ApiTags('File')
 @ApiBearerAuth()
@@ -89,17 +90,7 @@ export class FileController {
    */
   @ApiOperation({ summary: 'Create file' })
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
+  @ApiBody({ schema: createSchemaSwagger })
   @ApiCreatedResponse({ type: FileDto })
   @Post('create')
   @UseInterceptors(FileInterceptor('file'))
