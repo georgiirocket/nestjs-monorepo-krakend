@@ -1,4 +1,4 @@
-FROM node:20.16.0 As production
+FROM node:20.16.0 AS production
 
 WORKDIR /app
 

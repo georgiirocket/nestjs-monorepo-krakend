@@ -1,4 +1,4 @@
-FROM node:20.16.0 As development
+FROM node:20.16.0 AS development
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ COPY . .
 RUN npx prisma generate
 RUN npm run build auth
 
-FROM node:20.16.0 as production
+FROM node:20.16.0 AS production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
