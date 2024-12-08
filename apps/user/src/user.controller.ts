@@ -26,6 +26,8 @@ import { SERVICE_NAMES } from '@app/libs/constants/services';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from '@app/libs/dto/user/user.dto';
+import { EntityDto } from '@app/libs/dto/entity.dto';
+import { FILE_PATTERNS } from '@app/libs/constants/patterns/file';
 
 /**
  * Controller
@@ -36,6 +38,7 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     @Inject(SERVICE_NAMES.AUTH) private readonly authServices: ClientProxy,
+    @Inject(SERVICE_NAMES.FILE) private readonly fileServices: ClientProxy,
   ) {}
 
   /**
@@ -138,8 +141,14 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Delete('delete')
   async deleteEntity(
-    @TokenPayloadParams() data: TokenPayload,
+    @TokenPayloadParams() { userId }: TokenPayload,
   ): Promise<UserDto> {
-    return this.userService.deleteUser(data.userId);
+    const user = await this.userService.deleteUser(userId);
+
+    this.fileServices.emit<string, EntityDto>(FILE_PATTERNS.REMOVE_BY_USER_ID, {
+      entityId: userId,
+    });
+
+    return user;
   }
 }

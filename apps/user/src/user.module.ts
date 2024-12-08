@@ -11,6 +11,10 @@ import { SERVICE_NAMES } from '@app/libs/constants/services';
 @Module({
   imports: [PrismaModule],
   controllers: [UserController],
-  providers: [UserService, MicroService.register(SERVICE_NAMES.AUTH)],
+  providers: [
+    UserService,
+    MicroService.register(SERVICE_NAMES.AUTH),
+    MicroService.register(SERVICE_NAMES.FILE),
+  ],
 })
 export class UserModule {}

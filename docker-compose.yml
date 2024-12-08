@@ -41,7 +41,7 @@ services:
       migration:
         condition: service_completed_successfully
 
-  #File (api)
+  #File service (api)
   file:
     build:
       context: .

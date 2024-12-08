@@ -78,7 +78,7 @@ If you want to test endpoints. You can import this file in Postman
         s2[Post app]
         s2[Post app]
         s3[Auth app, service]
-        s4[File app]
+        s4[File app, service]
     end
 
     G --> s1
